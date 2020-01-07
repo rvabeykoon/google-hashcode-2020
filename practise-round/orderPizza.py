@@ -1,5 +1,7 @@
 #!/bin/python3
 
+# TODO: Write unit tests
+
 SEP = "/"
 INPUT_DATA_FOLDER = "input-data-sets"
 INPUT_DATA_FILES = [
