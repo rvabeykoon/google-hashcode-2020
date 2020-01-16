@@ -2,4 +2,7 @@
 
 ## Run program
 
-`python3 orderPizza.py`
+```
+cd practise-round
+python3 orderPizza.py
+```
