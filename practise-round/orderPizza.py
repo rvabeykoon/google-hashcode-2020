@@ -22,8 +22,8 @@ def orderPizzas():
             outputFile = OUTPUT_DATA_DIR + SEP + fileBase + OUTPUT_DATA_EXT
 
             # print(f.readlines())
-            getBestPizzaOrder(inputLines = f.readlines())
-            outputData = ""
+            print(fileBase + ' calculating...')
+            outputData = getBestPizzaOrder(inputLines = f.readlines())
 
             saveOutput(outputFile, outputData)
 
@@ -44,9 +44,11 @@ def getBestPizzaOrder(inputLines):
         else:
             numberOfSlicesPerPizza = numberList
 
-    sortFromLeftToRight(maximumSlices=maxSlices, differentPizzas=difPizzas, slicesPerPizza=numberOfSlicesPerPizza)
+    numberOfPizzas, typesOfPizzas = sortFromLeftToRight(maximumSlices=maxSlices, differentPizzas=difPizzas, slicesPerPizza=numberOfSlicesPerPizza)
 
-    return
+    outputLines = '' + str(numberOfPizzas) + '\n' + ' '.join(typesOfPizzas)
+
+    return outputLines
 
 
 def sortFromLeftToRight(maximumSlices: int, differentPizzas: int, slicesPerPizza: list):
@@ -69,15 +71,27 @@ def sortFromLeftToRight(maximumSlices: int, differentPizzas: int, slicesPerPizza
                 if currentSliceSum > maximumSliceSum:
                     maximumSliceSum = currentSliceSum
                     maximumSelection = pizzaSelection
-                else:
-                    pass
 
-    return
+        if(maximumSliceSum == maximumSlices):
+            break # stop the calculation early, if maximum slices is already EXACTLY reached!
+
+    print('Number of slices ordered: ' + str(maximumSliceSum))
+    numberOfPizzasToOrder, typesOfPizzas = getOutputInformation(selection=maximumSelection)
+
+    return numberOfPizzasToOrder, typesOfPizzas
 
 
-    print(pizzaSelection)
-    
-    return
+def getOutputInformation(selection: str):
+    typesOfPizzas = []
+
+    index = -1
+    for character in selection:
+        index += 1
+
+        if character == '1':
+            typesOfPizzas.append(str(index))
+
+    return len(typesOfPizzas), typesOfPizzas
 
 
 def saveOutput(fileLocation, data):
