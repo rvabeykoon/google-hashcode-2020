@@ -51,28 +51,29 @@ def getBestPizzaOrder(inputLines):
 
 def sortFromLeftToRight(maximumSlices: int, differentPizzas: int, slicesPerPizza: list):
     maximumSliceSum = 0
-    pizzaSelection = differentPizzas * '0'
+    maximumSelection = ''
+    
+    for outer_index in range (differentPizzas):
+        pizzaSelection = differentPizzas * '0'
+        currentSliceSum = 0
 
-    i = -1
-    currentSliceSum = 0
-    lastSliceNumberAdded = 0
+        for index in range(differentPizzas):
+            numberToSelect = (index + outer_index) % differentPizzas
+            sliceNumber = int(slicesPerPizza[numberToSelect])
 
-    for sliceNumber in slicesPerPizza:
-        sliceNumber = int(sliceNumber)
-        i += 1
+            if(currentSliceSum + sliceNumber <= maximumSlices):
+                currentSliceSum += sliceNumber
+                pizzaSelection = pizzaSelection[:numberToSelect] + '1' + pizzaSelection[numberToSelect + 1:] # replace the 0 in the selectionString with a 1
 
-        if(currentSliceSum < maximumSlices):
-            lastSliceNumberAdded = sliceNumber
-            currentSliceSum += sliceNumber
-            pizzaSelection = pizzaSelection[:i] + '1' + pizzaSelection[i + 1:] # replace the 0 in the selectionString with a 1
+            else:
+                if currentSliceSum > maximumSliceSum:
+                    maximumSliceSum = currentSliceSum
+                    maximumSelection = pizzaSelection
+                else:
+                    pass
 
-        else:
-            print(pizzaSelection)
-            maximumSliceSum = currentSliceSum - lastSliceNumberAdded
-            print(maximumSliceSum)
-            return
+    return
 
-        #print(sliceNumber)
 
     print(pizzaSelection)
     
