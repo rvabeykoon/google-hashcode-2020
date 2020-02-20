@@ -24,7 +24,9 @@ def importProblemStatement():
 
             print('Parsed problem statement ({}):\n'.format(fileBase), meta, '\n', libraries)
 
-            signupLibsAndScanBooks(meta, libraries)
+            registeredLibs = signupLibsAndScanBooks(meta, libraries)
+
+            print('Registered libs done scanning:\n', registeredLibs)
 
 
 def signupLibsAndScanBooks(meta, libraries):
@@ -40,7 +42,7 @@ def signupLibsAndScanBooks(meta, libraries):
             registeredLibs += <lib>
             <lib>['signupStarted'] = day
             inLibraryRegisteringProcess = True
-        if libDoneRegistering(registeredLibs[-1]):
+        if libIsDoneRegistering(registeredLibs[-1]):
             inLibraryRegisteringProcess = False
 
         for libsDoneRegistering(registeredLibs, day):
@@ -48,10 +50,13 @@ def signupLibsAndScanBooks(meta, libraries):
             # scan highest
             # sort out already scanned --> library['booksScanned'] = []
 
+    if not libIsDoneRegistering(registeredLibs[-1]):
+        registeredLibs = registeredLibs[:-1]
+
     return registeredLibs  # abzüglich die die noch nicht fertig regoistriert sind!!!!
 
 
-def libsDoneRegistering(registeredLibs, currentDay):
+def libIsDoneRegistering(registeredLibs, currentDay):
     # Filter out not done registering
 
     # registeredLib in registeredLibs
