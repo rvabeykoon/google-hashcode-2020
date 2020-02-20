@@ -77,8 +77,12 @@ def signupLibsAndScanBooks(meta, libraries):
             for capacity in range(int(lib['booksShippingPerDay'])):
                 bookToScan = getHighestValueBookNotYetScanned(lib, alreadyScannedBookIds, meta)
 
-                lib['booksScanned'] += [bookToScan]
-                alreadyScannedBookIds += [bookToScan]
+                if bookToScan is not None:
+
+                    lib['booksScanned'] += [bookToScan]
+                    alreadyScannedBookIds += [bookToScan['bookid']]
+
+                print("F1F1F1", alreadyScannedBookIds)
 
     # Voluntary filtering, would not be counted anyway
     # if not libIsDoneRegistering([registeredLibs[-1]], len(days)-1):
@@ -90,20 +94,30 @@ def signupLibsAndScanBooks(meta, libraries):
 
 
 def getHighestValueBookNotYetScanned(lib, alreadyScannedBookIds, metaData):
-    # TODO: Implement me :)
-    booksToScanInLib = lib['bookIds']
-    bookScores = []
 
-    for index in range(len(booksToScanInLib)):
-        bookScores.append(metaData['bookScores'][int(booksToScanInLib[index]]))
+    possibleBooks = []
 
-    bookScores.sort(reverse=True)
+    for book in lib['bookIds']:
+        if not int(book) in alreadyScannedBookIds:
+            possibleBooks += [{'bookid': int(book), 'bookScore': metaData['bookScores'][int(book)]}]
 
-    for score in metaData['bookScores'].:
-        if score not in alreadyScannedBookIds:
-            return
+    possibleBooks.sort(key = lambda b: b['bookScore'], reverse=True)
 
-    pass
+    print(possibleBooks)
+
+    # booksToScanInLib = lib['bookIds']
+    # bookScores = []
+
+    # for index in range(len(booksToScanInLib)):
+    #     bookScores.append(metaData['bookScores'][int(booksToScanInLib[index]]))
+
+    # for score in metaData['bookScores'].:
+    #     if score not in alreadyScannedBookIds:
+
+    if len(possibleBooks) > 1:
+        return possibleBooks[0]
+    else:
+        return None
 
 
 def allLibsDoneRegistering(registeredLibs, currentDay):
