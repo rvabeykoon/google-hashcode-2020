@@ -51,6 +51,7 @@ def orderLibsByValue(libraries):
                         scoreList.insert(j, libScore)
                         orderedLibs.insert(j, lib)
 
+
     return orderedLibs
 
 
@@ -81,7 +82,7 @@ def signupLibsAndScanBooks(meta, libraries):
 
         for lib in allLibsDoneRegistering(registeredLibs, day):
             for capacity in range(int(lib['booksShippingPerDay'])):
-                bookToScan = getHighestValueBookNotYetScanned(lib, alreadyScannedBookIds)
+                bookToScan = getHighestValueBookNotYetScanned(lib, alreadyScannedBookIds, meta)
 
                 lib['booksScanned'] += [bookToScan]
                 alreadyScannedBookIds += [bookToScan]
@@ -95,8 +96,20 @@ def signupLibsAndScanBooks(meta, libraries):
     return registeredLibs  # abzüglich die die noch nicht fertig regoistriert sind!!!!
 
 
-def getHighestValueBookNotYetScanned(lib, alreadyScannedBookIds):
+def getHighestValueBookNotYetScanned(lib, alreadyScannedBookIds, metaData):
     # TODO: Implement me :)
+    booksToScanInLib = lib['bookIds']
+    bookScores = []
+
+    for index in range(len(booksToScanInLib)):
+        bookScores.append(metaData['bookScores'][int(booksToScanInLib[index]]))
+
+    bookScores.sort(reverse=True)
+
+    for score in metaData['bookScores'].:
+        if score not in alreadyScannedBookIds:
+            return
+
     pass
 
 
