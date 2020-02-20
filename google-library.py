@@ -83,6 +83,7 @@ def signupLibsAndScanBooks(meta, libraries):
     alreadyScannedBookIds = []
 
     for day in range(int(meta['days'])):
+        print("Day {}/{}".format(day, meta['days']))
 
         if not (len(registeredLibs)) == 0:  # unregister possibly
             #print("DEBUG registered:", registeredLibs[-1], day, isRegistered(registeredLibs[-1], day))
@@ -98,7 +99,7 @@ def signupLibsAndScanBooks(meta, libraries):
 
         for lib in allLibsDoneRegistering(registeredLibs, day):
             for capacity in range(int(lib['booksShippingPerDay'])):
-                bookToScan = getHighestValueBookNotYetScanned(lib, alreadyScannedBookIds, meta)
+                bookToScan = getHighestValueBookNotYetScanned(lib, alreadyScannedBookIds)
 
                 if bookToScan is not None:
 
@@ -116,31 +117,11 @@ def signupLibsAndScanBooks(meta, libraries):
     return registeredLibs  # abzüglich die die noch nicht fertig regoistriert sind!!!!
 
 
-def getHighestValueBookNotYetScanned(lib, alreadyScannedBookIds, metaData):
-
-    possibleBooks = []
-
+def getHighestValueBookNotYetScanned(lib, alreadyScannedBookIds):
     for book in lib['bookIds']:
-        if not int(book) in alreadyScannedBookIds:
-            possibleBooks += [{'bookid': int(book), 'bookScore': metaData['bookScores'][int(book)]}]
-
-    possibleBooks.sort(key = lambda b: b['bookScore'], reverse=True)
-
-    # print(possibleBooks)
-
-    # booksToScanInLib = lib['bookIds']
-    # bookScores = []
-
-    # for index in range(len(booksToScanInLib)):
-    #     bookScores.append(metaData['bookScores'][int(booksToScanInLib[index]]))
-
-    # for score in metaData['bookScores'].:
-    #     if score not in alreadyScannedBookIds:
-
-    if len(possibleBooks) > 1:
-        return possibleBooks[0]
-    else:
-        return None
+        if not int(book['bookid']) in alreadyScannedBookIds:
+            return book
+    return None
 
 
 def allLibsDoneRegistering(registeredLibs, currentDay):
@@ -155,6 +136,20 @@ def allLibsDoneRegistering(registeredLibs, currentDay):
 
 def isRegistered(lib, day):
     return int(lib['signupStarted']) + int(day) >= int(lib['signupDays'])
+
+
+def orderBooksByAndEnrichWithScore(bookIds, metaData):
+    possibleBooks = []
+
+    for book in bookIds:
+        possibleBooks += [{'bookid': int(book), 'bookScore': metaData['bookScores'][int(book)]}]
+
+    possibleBooks.sort(key = lambda b: b['bookScore'], reverse=True)
+
+    if len(possibleBooks) > 1:
+        return possibleBooks
+    else:
+        return []
 
 
 def parseProblemStatement(problemFile):
@@ -176,7 +171,7 @@ def parseProblemStatement(problemFile):
         library['booksCount'] = libLine1[0]
         library['signupDays'] = libLine1[1]
         library['booksShippingPerDay'] = libLine1[2]
-        library['bookIds'] = libLine2
+        library['bookIds'] = orderBooksByAndEnrichWithScore(libLine2, meta)
 
         library['booksScanned'] = []
 
