@@ -65,16 +65,19 @@ def signupLibsAndScanBooks(meta, libraries):
 
     alreadyScannedBookIds = []
 
-    for day in meta['days']:
+    for day in range(int(meta['days'])):
+
+        if not (len(registeredLibs)) == 0:  # unregister possibly
+            print("DEBUG registered:", registeredLibs[-1], day, isRegistered(registeredLibs[-1], day))
+
+            if isRegistered(registeredLibs[-1], day):
+                inLibraryRegisteringProcess = False
 
         if not inLibraryRegisteringProcess and len(libs) > 0:  # investigate last lib OR len = 0
             inLibraryRegisteringProcess = True
             chosenLib = libs.pop(0)
             registeredLibs += [chosenLib]  # nextBestLib
             chosenLib['signupStarted'] = day
-
-        if isRegistered(registeredLibs[-1], day):
-            inLibraryRegisteringProcess = False
 
         for lib in allLibsDoneRegistering(registeredLibs, day):
             for capacity in range(int(lib['booksShippingPerDay'])):
@@ -108,7 +111,6 @@ def allLibsDoneRegistering(registeredLibs, currentDay):
 
 
 def isRegistered(lib, day):
-    print(lib)
     return int(lib['signupStarted']) + int(day) >= int(lib['signupDays'])
 
 
