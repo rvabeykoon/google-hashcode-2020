@@ -30,7 +30,27 @@ def importProblemStatement():
 
 
 def orderLibsByValue(libraries):
-    # TODO: Implement me :)
+    orderedLibs = []
+    scoreList = []
+
+    for lib in libraries:
+        libScore = lib['booksShippingPerDay'] * lib['booksCount'] - lib['booksShippingPerDay'] * lib['signupDays']
+
+        if len(scoreList) == 0:
+            scoreList.append(libScore)
+            orderedLibs.append(lib)
+        else:
+            if scoreList[-1] > libScore:
+                scoreList.append(libScore)
+                orderedLibs.append(libScore)
+            else:
+                j = -1
+                for score in scoreList:
+                    j += 1
+                    if score < libScore:
+                        scoreList.insert(j, libScore)
+                        orderedLibs.insert(j, lib)
+
     return libraries
 
 
