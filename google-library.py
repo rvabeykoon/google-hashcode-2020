@@ -29,44 +29,61 @@ def importProblemStatement():
             print('Registered libs done scanning:\n', registeredLibs)
 
 
+def orderLibsByValue(libraries):
+    # TODO: Implement me :)
+    return libraries
+
+
 def signupLibsAndScanBooks(meta, libraries):
+
+    libs = orderLibsByValue(libraries)
 
     # Best library (highest throughput)
     # rank all libs order by highest <value>
     registeredLibs = []
     inLibraryRegisteringProcess = False
 
-    # POroceed through days
+    alreadyScannedBookIds = []
+
     for day in days:
-        if not inLibraryRegisteringProcess:
-            registeredLibs += <lib>
-            <lib>['signupStarted'] = day
+
+        if not inLibraryRegisteringProcess:  # investigate last lib OR len = 0
             inLibraryRegisteringProcess = True
-        if libIsDoneRegistering(registeredLibs[-1]):
+            registeredLibs += <lib>  # nextBestLib
+            <lib>['signupStarted'] = day
+
+        if isRegistered(registeredLibs[-1], day):
             inLibraryRegisteringProcess = False
 
-        for libsDoneRegistering(registeredLibs, day):
+        for allLibsDoneRegistering(registeredLibs, day):
             # order book by value in bookIds
             # scan highest
             # sort out already scanned --> library['booksScanned'] = []
 
-    if not libIsDoneRegistering(registeredLibs[-1]):
-        registeredLibs = registeredLibs[:-1]
+            if book not in alreadyScannedBookIds:
+                pass
+
+    # Voluntary filtering, would not be counted anyway
+    # if not libIsDoneRegistering([registeredLibs[-1]], len(days)-1):
+    #     registeredLibs = registeredLibs[:-1]
+
+    # Scan books (order by highest) for already registered libs
 
     return registeredLibs  # abzüglich die die noch nicht fertig regoistriert sind!!!!
 
 
-def libIsDoneRegistering(registeredLibs, currentDay):
-    # Filter out not done registering
+def allLibsDoneRegistering(registeredLibs, currentDay):
+    successfullyRegisteredLibs = []
 
-    # registeredLib in registeredLibs
-    # if <lib>['signupStarted'] + day <= signupDays
-    pass
+    for lib in registeredLibs:
+        if isRegistered(lib, currentDay):
+            successfullyRegisteredLibs += [lib]
 
-    # Register libs
-    # Scan books (order by highest) for already registered libs
+    return successfullyRegisteredLibs
 
-    return OUTPUTDATA
+
+def isRegistered(lib, day):
+    return lib['signupStarted'] + day >= lib['signupDays']
 
 
 def parseProblemStatement(problemFile):
