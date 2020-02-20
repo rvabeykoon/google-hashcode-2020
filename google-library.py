@@ -34,7 +34,7 @@ def orderLibsByValue(libraries):
     scoreList = []
 
     for lib in libraries:
-        libScore = lib['booksShippingPerDay'] * lib['booksCount'] - lib['booksShippingPerDay'] * lib['signupDays']
+        libScore = int(lib['booksShippingPerDay']) * int(lib['booksCount']) - int(lib['booksShippingPerDay']) * int(lib['signupDays'])
 
         if len(scoreList) == 0:
             scoreList.append(libScore)
@@ -51,7 +51,7 @@ def orderLibsByValue(libraries):
                         scoreList.insert(j, libScore)
                         orderedLibs.insert(j, lib)
 
-    return libraries
+    return orderedLibs
 
 
 def signupLibsAndScanBooks(meta, libraries):
