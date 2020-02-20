@@ -14,6 +14,7 @@ INPUT_DATA_EXT = ".txt"
 OUTPUT_DATA_DIR = "out"
 OUTPUT_DATA_EXT = ".out"
 
+
 def importProblemStatement():
     for fileBase in INPUT_DATA_FILES:
         with open(INPUT_DATA_FOLDER + SEP + fileBase + INPUT_DATA_EXT, "r") as f:
@@ -23,9 +24,44 @@ def importProblemStatement():
 
             print('Parsed problem statement ({}):\n'.format(fileBase), meta, '\n', libraries)
 
-# Best library (highest throughput)
-# Most valuable books first
+            signupLibsAndScanBooks(meta, libraries)
 
+
+def signupLibsAndScanBooks(meta, libraries):
+
+    # Best library (highest throughput)
+    # rank all libs order by highest <value>
+    registeredLibs = []
+    inLibraryRegisteringProcess = False
+
+    # POroceed through days
+    for day in days:
+        if not inLibraryRegisteringProcess:
+            registeredLibs += <lib>
+            <lib>['signupStarted'] = day
+            inLibraryRegisteringProcess = True
+        if libDoneRegistering(registeredLibs[-1]):
+            inLibraryRegisteringProcess = False
+
+        for libsDoneRegistering(registeredLibs, day):
+            # order book by value in bookIds
+            # scan highest
+            # sort out already scanned --> library['booksScanned'] = []
+
+    return registeredLibs  # abzüglich die die noch nicht fertig regoistriert sind!!!!
+
+
+def libsDoneRegistering(registeredLibs, currentDay):
+    # Filter out not done registering
+
+    # registeredLib in registeredLibs
+    # if <lib>['signupStarted'] + day <= signupDays
+    pass
+
+    # Register libs
+    # Scan books (order by highest) for already registered libs
+
+    return OUTPUTDATA
 
 
 def parseProblemStatement(problemFile):
@@ -49,11 +85,11 @@ def parseProblemStatement(problemFile):
         library['booksShippingPerDay'] = libLine1[2]
         library['bookIds'] = libLine2
 
+        library['booksScanned'] = []
+
         libraries += [library]
 
     return meta, libraries
-
-
 
 
 if __name__ == "__main__":
