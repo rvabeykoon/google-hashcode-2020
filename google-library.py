@@ -36,32 +36,32 @@ def orderLibsByValue(libraries):
 
 def signupLibsAndScanBooks(meta, libraries):
 
-    libs = orderLibsByValue(libraries)
-
     # Best library (highest throughput)
     # rank all libs order by highest <value>
+    libs = orderLibsByValue(libraries)
+
     registeredLibs = []
     inLibraryRegisteringProcess = False
 
     alreadyScannedBookIds = []
 
-    for day in days:
+    for day in meta['days']:
 
-        if not inLibraryRegisteringProcess:  # investigate last lib OR len = 0
+        if not inLibraryRegisteringProcess and len(libs) > 0:  # investigate last lib OR len = 0
             inLibraryRegisteringProcess = True
-            registeredLibs += <lib>  # nextBestLib
-            <lib>['signupStarted'] = day
+            chosenLib = libs.pop(0)
+            registeredLibs += [chosenLib]  # nextBestLib
+            chosenLib['signupStarted'] = day
 
         if isRegistered(registeredLibs[-1], day):
             inLibraryRegisteringProcess = False
 
-        for allLibsDoneRegistering(registeredLibs, day):
-            # order book by value in bookIds
-            # scan highest
-            # sort out already scanned --> library['booksScanned'] = []
+        for lib in allLibsDoneRegistering(registeredLibs, day):
+            for capacity in range(int(lib['booksShippingPerDay'])):
+                bookToScan = getHighestValueBookNotYetScanned(lib, alreadyScannedBookIds)
 
-            if book not in alreadyScannedBookIds:
-                pass
+                lib['booksScanned'] += [bookToScan]
+                alreadyScannedBookIds += [bookToScan]
 
     # Voluntary filtering, would not be counted anyway
     # if not libIsDoneRegistering([registeredLibs[-1]], len(days)-1):
@@ -70,6 +70,11 @@ def signupLibsAndScanBooks(meta, libraries):
     # Scan books (order by highest) for already registered libs
 
     return registeredLibs  # abzüglich die die noch nicht fertig regoistriert sind!!!!
+
+
+def getHighestValueBookNotYetScanned(lib, alreadyScannedBookIds):
+    # TODO: Implement me :)
+    pass
 
 
 def allLibsDoneRegistering(registeredLibs, currentDay):
@@ -83,7 +88,8 @@ def allLibsDoneRegistering(registeredLibs, currentDay):
 
 
 def isRegistered(lib, day):
-    return lib['signupStarted'] + day >= lib['signupDays']
+    print(lib)
+    return int(lib['signupStarted']) + int(day) >= int(lib['signupDays'])
 
 
 def parseProblemStatement(problemFile):
