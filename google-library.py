@@ -4,11 +4,11 @@ SEP = "/"
 INPUT_DATA_FOLDER = "library-in-files"
 INPUT_DATA_FILES = [
     "a_example",
-    #"b_read_on",
-    #"c_incunabula",
-    #"d_tough_choices",
-    #"e_so_many_books",
-    #"f_libraries_of_the_world"
+    "b_read_on",
+    "c_incunabula",
+    "d_tough_choices",
+    "e_so_many_books",
+    "f_libraries_of_the_world"
 ]
 INPUT_DATA_EXT = ".txt"
 OUTPUT_DATA_DIR = "out"
@@ -22,11 +22,34 @@ def importProblemStatement():
 
             meta, libraries = parseProblemStatement(f)
 
-            print('Parsed problem statement ({}):\n'.format(fileBase), meta, '\n', libraries)
+            #print('Parsed problem statement ({}):\n'.format(fileBase), meta, '\n', libraries)
 
             registeredLibs = signupLibsAndScanBooks(meta, libraries)
 
-            print('Registered libs done scanning:\n', registeredLibs)
+            #print('Registered libs done scanning:\n', registeredLibs)
+
+            output = parseOutputAndWriteToFile(registeredLibs)
+            saveOutput(outputFile, output)
+
+
+def saveOutput(fileLocation, data):
+    with open(fileLocation, "w+") as f:
+        f.write(data)
+
+
+def parseOutputAndWriteToFile(registeredLibs):
+    output = ""
+
+    # lib count
+    output += str(len(registeredLibs)) + "\n"
+
+    for lib in registeredLibs:
+        output += str(lib['id']) + " " + str(len(lib['booksScanned'])) + "\n"
+        for book in lib['booksScanned']:
+            output += str(book['bookid']) + ' '
+        output += '\n'
+
+    return output
 
 
 def orderLibsByValue(libraries):
@@ -62,7 +85,7 @@ def signupLibsAndScanBooks(meta, libraries):
     for day in range(int(meta['days'])):
 
         if not (len(registeredLibs)) == 0:  # unregister possibly
-            print("DEBUG registered:", registeredLibs[-1], day, isRegistered(registeredLibs[-1], day))
+            #print("DEBUG registered:", registeredLibs[-1], day, isRegistered(registeredLibs[-1], day))
 
             if isRegistered(registeredLibs[-1], day):
                 inLibraryRegisteringProcess = False
@@ -82,7 +105,7 @@ def signupLibsAndScanBooks(meta, libraries):
                     lib['booksScanned'] += [bookToScan]
                     alreadyScannedBookIds += [bookToScan['bookid']]
 
-                print("F1F1F1", alreadyScannedBookIds)
+                #print("F1F1F1", alreadyScannedBookIds)
 
     # Voluntary filtering, would not be counted anyway
     # if not libIsDoneRegistering([registeredLibs[-1]], len(days)-1):
@@ -103,7 +126,7 @@ def getHighestValueBookNotYetScanned(lib, alreadyScannedBookIds, metaData):
 
     possibleBooks.sort(key = lambda b: b['bookScore'], reverse=True)
 
-    print(possibleBooks)
+    # print(possibleBooks)
 
     # booksToScanInLib = lib['bookIds']
     # bookScores = []
