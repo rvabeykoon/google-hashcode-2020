@@ -30,29 +30,22 @@ def importProblemStatement():
 
 
 def orderLibsByValue(libraries):
-    orderedLibs = []
-    scoreList = []
+    valuedLibs = []
 
     for lib in libraries:
-        libScore = int(lib['booksShippingPerDay']) * int(lib['booksCount']) - int(lib['booksShippingPerDay']) * int(lib['signupDays'])
+        lib['libScore'] = \
+                      (int(lib['booksShippingPerDay']) \
+                       * int(lib['booksCount'])) \
+                    - (int(lib['booksShippingPerDay']) \
+                       * int(lib['signupDays']))
 
-        if len(scoreList) == 0:
-            scoreList.append(libScore)
-            orderedLibs.append(lib)
-        else:
-            if scoreList[-1] > libScore:
-                scoreList.append(libScore)
-                orderedLibs.append(libScore)
-            else:
-                j = -1
-                for score in scoreList:
-                    j += 1
-                    if score < libScore:
-                        scoreList.insert(j, libScore)
-                        orderedLibs.insert(j, lib)
+        valuedLibs += [lib]
 
+    sorted(valuedLibs, key = lambda libz: int(libz['libScore']))
 
-    return orderedLibs
+    # print("DEBUG: valuedLibs", valuedLibs)
+
+    return valuedLibs
 
 
 def signupLibsAndScanBooks(meta, libraries):
